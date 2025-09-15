@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { mockApi } from './mockApi';
+import { realApi } from './realApi';
 
 function App() {
   const [text, setText] = useState('');
@@ -18,7 +18,7 @@ function App() {
 
   const pollStatus = async () => {
     try {
-      const data = await mockApi.getStatus(processingId);
+      const data = await realApi.getStatus(processingId);
       
       if (data.status === 'completed' && data.videoUrl) {
         // Success: clear text, show video, stop processing
@@ -27,25 +27,15 @@ function App() {
         setIsProcessing(false);
         setProcessingId('');
         localStorage.removeItem('processingId');
-      } else if (data.status === 'error') {
-        if (data.message === 'Job expired or not found') {
-          // Silently clear expired job
-          setIsProcessing(false);
-          setProcessingId('');
-          localStorage.removeItem('processingId');
-        } else {
-          // Show actual processing errors
-          setError(data.message || 'Processing failed');
-          setIsProcessing(false);
-          setProcessingId('');
-          localStorage.removeItem('processingId');
-        }
+      } else if (data.status === 'failed' || data.error) {
+        // Show processing errors
+        setError(data.error || 'Processing failed');
+        setIsProcessing(false);
+        setProcessingId('');
+        localStorage.removeItem('processingId');
       } else {
         // Keep processing - continue polling
         setTimeout(pollStatus, 1000);
-
-
-        
       }
     } catch (err) {
       setError('Failed to check status');
@@ -66,7 +56,7 @@ function App() {
     setIsProcessing(true);
     
     try {
-      const data = await mockApi.convert(text);
+      const data = await realApi.convert(text);
       setProcessingId(data.id);
       localStorage.setItem('processingId', data.id);
       // Don't call pollStatus here - let useEffect handle it
