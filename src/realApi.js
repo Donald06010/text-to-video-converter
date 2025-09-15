@@ -3,11 +3,12 @@ const API_BASE_URL = 'http://127.0.0.1:8001';
 
 export const realApi = {
   convert: async (text) => {
-    const response = await fetch(`${API_BASE_URL}/create-talking-photo-video?text=${encodeURIComponent(text)}`, {
+    const response = await fetch(`${API_BASE_URL}/create-talking-photo-video`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      body: JSON.stringify({ text })
     });
 
     if (!response.ok) {
