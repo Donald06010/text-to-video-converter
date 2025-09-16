@@ -122,6 +122,7 @@ function App() {
             <video 
               src={videoUrl} 
               controls 
+              controlsList="nofullscreen"
               className="video-preview"
               width="100%"
               height="300"
