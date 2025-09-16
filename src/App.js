@@ -21,7 +21,7 @@ function App() {
     try {
       const data = await realApi.getStatus(processingId);
       setStatus(data.status);
-      
+
       if (data.status === 'completed' && data.videoUrl) {
         setText('');
         setVideoUrl(data.videoUrl);
@@ -50,7 +50,7 @@ function App() {
     setVideoUrl('');
     setStatus('');
     setIsProcessing(true);
-    
+
     try {
       const data = await realApi.convert(text);
       setProcessingId(data.id);
@@ -82,7 +82,7 @@ function App() {
     <div className="app">
       <div className="card">
         <h1>Text to Video Converter</h1>
-        
+
         <div className="input-section">
           <textarea
             value={text}
@@ -91,12 +91,19 @@ function App() {
             maxLength={5000}
             disabled={isProcessing}
           />
-          <div className="char-counter">
-            {text.length}/5000
-            {processingId && status && <span className="status-text"> | Status: {status}</span>}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}>
+            <div style={{ textAlign: 'left' }}>
+              {processingId && status && <span className="status-text"> | Status: {status}</span>}
+            </div>
+            <div className="char-counter">
+              {text.length}/5000
+            </div>
           </div>
-          
-          <button 
+
+          <button
             onClick={handleSubmit}
             disabled={isProcessing || !text.trim()}
             className="submit-btn"
@@ -119,9 +126,9 @@ function App() {
         {videoUrl && (
           <div className="success">
             <p>Video ready!</p>
-            <video 
-              src={videoUrl} 
-              controls 
+            <video
+              src={videoUrl}
+              controls
               controlsList="nofullscreen"
               className="video-preview"
               width="100%"

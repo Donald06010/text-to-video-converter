@@ -62,7 +62,7 @@ textarea:disabled {
 }
 
 .char-counter {
-  text-align: center;
+  text-align: right;
   color: #666;
   font-size: 14px;
   margin: 8px 0 20px;
