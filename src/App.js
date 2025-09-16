@@ -8,6 +8,7 @@ function App() {
   const [error, setError] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [processingId, setProcessingId] = useState(localStorage.getItem('processingId') || '');
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
     if (processingId && !videoUrl) {
@@ -19,22 +20,20 @@ function App() {
   const pollStatus = async () => {
     try {
       const data = await realApi.getStatus(processingId);
+      setStatus(data.status);
       
       if (data.status === 'completed' && data.videoUrl) {
-        // Success: clear text, show video, stop processing
         setText('');
         setVideoUrl(data.videoUrl);
         setIsProcessing(false);
         setProcessingId('');
         localStorage.removeItem('processingId');
       } else if (data.status === 'failed' || data.error) {
-        // Show processing errors
         setError(data.error || 'Processing failed');
         setIsProcessing(false);
         setProcessingId('');
         localStorage.removeItem('processingId');
       } else {
-        // Keep processing - continue polling
         setTimeout(pollStatus, 1000);
       }
     } catch (err) {
@@ -47,19 +46,15 @@ function App() {
 
   const handleSubmit = async () => {
     if (!text.trim()) return;
-    
-    // Clear all previous states first
     setError('');
     setVideoUrl('');
-    
-    // Then start processing
+    setStatus('');
     setIsProcessing(true);
     
     try {
       const data = await realApi.convert(text);
       setProcessingId(data.id);
       localStorage.setItem('processingId', data.id);
-      // Don't call pollStatus here - let useEffect handle it
     } catch (err) {
       setError('Network error occurred');
       setIsProcessing(false);
@@ -79,6 +74,7 @@ function App() {
     setError('');
     setVideoUrl('');
     setProcessingId('');
+    setStatus('');
     localStorage.removeItem('processingId');
   };
 
@@ -95,7 +91,10 @@ function App() {
             maxLength={5000}
             disabled={isProcessing}
           />
-          <div className="char-counter">{text.length}/5000</div>
+          <div className="char-counter">
+            {text.length}/5000
+            {processingId && status && <span className="status-text"> | Status: {status}</span>}
+          </div>
           
           <button 
             onClick={handleSubmit}
@@ -110,7 +109,7 @@ function App() {
           <div className="error">{error}</div>
         )}
 
-        {isProcessing && !error && (
+        {isProcessing && !processingId && !error && (
           <div className="status">
             <div className="spinner"></div>
             <p>Converting your text to video...</p>

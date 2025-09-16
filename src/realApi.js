@@ -3,12 +3,11 @@ const API_BASE_URL = 'http://127.0.0.1:8001';
 
 export const realApi = {
   convert: async (text) => {
-    const response = await fetch(`${API_BASE_URL}/create-talking-photo-video`, {
+    const response = await fetch(`${API_BASE_URL}/create-talking-photo-video?text=${text}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text })
     });
 
     if (!response.ok) {
@@ -16,7 +15,7 @@ export const realApi = {
     }
 
     const data = await response.json();
-    
+
     if (!data.success || !data.heygen_response?.data?.video_id) {
       throw new Error('Invalid response from server');
     }
@@ -26,13 +25,13 @@ export const realApi = {
 
   getStatus: async (videoId) => {
     const response = await fetch(`${API_BASE_URL}/video-status/${videoId}`);
-    
+
     if (!response.ok) {
       throw new Error('Failed to get video status');
     }
 
     const data = await response.json();
-    
+
     return {
       status: data.status,
       videoUrl: data.video_url,
