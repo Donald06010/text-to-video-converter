@@ -139,24 +139,48 @@ textarea:disabled {
   margin-bottom: 16px;
 }
 
-.video-preview {
+.video-container {
+  position: relative;
   border-radius: 8px;
   margin: 16px 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  position: relative;
+  overflow: hidden;
 }
 
-.video-preview::after {
+.video-preview {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+}
+
+.video-container::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background: white;
+  height: 80px;
+  background: #f0fff4;
   pointer-events: none;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  z-index: 1;
+}
+
+.video-preview::-webkit-media-controls {
+  z-index: 2;
+  position: relative;
+}
+
+.video-preview::-webkit-media-controls-panel {
+  z-index: 2;
+  position: relative;
+}
+
+/* Hide fullscreen button */
+video::-webkit-media-controls-fullscreen-button {
+  display: none;
+}
+
+video::-moz-media-controls-fullscreen-button {
+  display: none;
 }
 
 .reset-btn {

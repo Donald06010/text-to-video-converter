@@ -99,7 +99,7 @@ function App() {
               {processingId && status && <span className="status-text"> | Status: {status}</span>}
             </div>
             <div className="char-counter">
-              {text.length}/5000
+              {/* {text.length}/5000 */}
             </div>
           </div>
 
@@ -126,22 +126,24 @@ function App() {
         {videoUrl && (
           <div className="success">
             <p>Video ready!</p>
-            <video
-              src={videoUrl}
-              controls
-              controlsList="nofullscreen"
-              className="video-preview"
-              width="100%"
-              height="300"
-            >
-              Your browser does not support the video tag.
-            </video>
+            <div className='video-container'>
+              <video
+                src={videoUrl}
+                // src='https://files2.heygen.ai/aws_pacific/avatar_tmp/cf54a2b9446f4e8c9563ede71a8fc898/8d646942dd054dde984516788357bdee.mp4?Expires=1758607878&Signature=poWcnBiO88Yu~kNhwvWXrWPEPZjUpJfJ9HWGu7CVeu6RUvGapJfSw-FwJCSU8Zr4RYh~4KUMvOJ55EOzjx9vtgACL0odyLTU-rpfShhYVlmdpGrGYX4quWgOhmR1MT5VkX8mHUoeWQ~NnwChc9mOCObGTbFtDZEvXxGmGsiWjMpDoiC7~32awdojy6YGrBOcYo0xYr8UpXUdrh5bs33NCp6ikvepqboL33Jq0CQXSvHd8lKUc~8Vbpl-Wgqy1WnEE9gdEqK6ZqUwujzuJp7WxR21XDyZFm5F6w1lxCGRLRPl9iK1Zg1MDUrd3PF~2Nr7dwXkliCUThYC8r~0D9SBfA__&Key-Pair-Id=K38HBHX5LX3X2H'
+                controls
+                controlsList="nofullscreen"
+                className="video-preview"
+                width="100%"
+                height="300"
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
             <button onClick={handleDownload} className="download-btn">
               Download Video
             </button>
           </div>
         )}
-
         <button onClick={handleReset} className="reset-btn">
           Reset
         </button>
